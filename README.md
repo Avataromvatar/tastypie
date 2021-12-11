@@ -1,0 +1,2 @@
+# tastypie
+This is an experiment (probably another bike) with an architecture similar to biological mats: layers are formed from bacteria , waste products are transferred between layers. Program layers are formed from nodes. Each node has input and output receptors (endpoints) with filtering of incoming data. The incoming data field is like extracellular matrix, it will be controlled by the layer controller at the software level. Well, and so on, how will it go
