@@ -1,15 +1,20 @@
 import 'package:tastypie/src/archaea/iarchaea.dart';
+import 'package:tastypie/src/dto/dto.dart';
 
 abstract class IColony {
+  bool get isUpdating;
   void addArchaea(IArchaeaMechanics archaea);
   void removeArchaea(IArchaeaMechanics archaea);
+  // void updateArchaea(IArchaeaMechanics archaea);
+  void updateDirectNet();
+
+  ///Send to extern space (not another colony)
+  bool sendToExtern(ITastyPieDTO dto);
 }
 
 abstract class IColonyMechanics {
-  List<IArchaea> getArchaea(String name);
+  List<IArchaea>? getArchaea(String name);
 
-  ///direct connect out -> input.
-  ///This need to unload the processor. Colony search pair topicOUT topicIN and link archaeas
-  bool directConnect(IArchaeaMechanics arc);
-  bool directDisconnect(IArchaeaMechanics arc);
+  ///connect another colony and analize all archaea for direct connect
+  bool connectColony(IColonyMechanics colony);
 }
