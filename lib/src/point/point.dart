@@ -4,6 +4,7 @@ import 'package:tastypie/src/filter/filter.dart';
 
 abstract class IArchaeaPointCommon {
   // List<IArchaeaFilter> get filter;
+
   String get topic;
   int get stateMask;
   bool checkAccess(String topic, int state);

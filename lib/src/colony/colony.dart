@@ -4,10 +4,15 @@ import 'package:tastypie/src/dto/dto.dart';
 import 'package:tastypie/src/point/point.dart';
 
 class Colony implements IColonyMechanics {
+  ///topic state [IArchaeaMechanics]
   Map<String, Map<int, List<IArchaeaMechanics>>> _inputs =
       Map<String, Map<int, List<IArchaeaMechanics>>>();
+
+  ///topic state [IArchaeaMechanics]
   Map<String, Map<int, List<IArchaeaMechanics>>> _outputs =
       Map<String, Map<int, List<IArchaeaMechanics>>>();
+
+  ///name [IArchaeaMechanics]
   Map<String, List<IArchaeaMechanics>> _archaeas =
       Map<String, List<IArchaeaMechanics>>();
   bool _isUpdating = false;
@@ -50,7 +55,7 @@ class Colony implements IColonyMechanics {
     });
   }
 
-  void _removeToInput(IArchaeaMechanics arc) {
+  void _removeFromInput(IArchaeaMechanics arc) {
     arc.inpoint.forEach((element) {
       if (_inputs.containsKey(element.topic)) {
         if (_inputs[element.topic]!.containsKey(element.stateMask)) {
@@ -60,7 +65,7 @@ class Colony implements IColonyMechanics {
     });
   }
 
-  void _removeToOutput(IArchaeaMechanics arc) {
+  void _removeFromOutput(IArchaeaMechanics arc) {
     arc.outpoint.forEach((element) {
       if (_outputs.containsKey(element.topic)) {
         if (_outputs[element.topic]!.containsKey(element.stateMask)) {
@@ -84,7 +89,35 @@ class Colony implements IColonyMechanics {
     }
   }
 
-  void updateDirectNet() {}
+  void directLinkArchaea(IArchaeaMechanics arch) {
+    for (var i = 0; i < arch.outpoint.length; i++) {
+      //
+
+      if (_inputs.containsKey(arch.outpoint[i].topic)) {
+        //we find topic
+        // var states = _inputs[arch.outpoint[i].topic]!.keys;
+
+        _inputs[arch.outpoint[i].topic]!.forEach((key, value) {
+          if ((key & arch.outpoint[i].stateMask) != 0) {
+            //state Ok
+            value.forEach((archaea) {
+              if (archaea != arch) {
+                arch.outpoint[i].connect(archaea.inpoint.singleWhere((input) =>
+                    input.checkAccess(
+                        arch.outpoint[i].topic, arch.outpoint[i].stateMask)));
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void unlinkArchaea(IArchaeaMechanics arch) {}
+
+  void updateDirectNet() {
+    //step 1
+  }
 
   bool sendToExtern(ITastyPieDTO dto) {
     return false;
