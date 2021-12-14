@@ -2,13 +2,16 @@ import 'package:tastypie/src/archaea/iarchaea.dart';
 import 'package:tastypie/src/dto/dto.dart';
 
 abstract class IColony {
-  bool get isUpdating;
+  // bool get isUpdating;
   void addArchaea(IArchaeaMechanics archaea);
   void removeArchaea(IArchaeaMechanics archaea);
   // void updateArchaea(IArchaeaMechanics archaea);
   void updateDirectNet();
 
-  ///Send to extern space (not another colony)
+  ///from extern to in space
+  bool call(ITastyPieDTO dto);
+
+  ///from inner space to extern space
   bool sendToExtern(ITastyPieDTO dto);
 }
 

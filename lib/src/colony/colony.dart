@@ -7,20 +7,20 @@ import 'package:tastypie/src/point/point.dart';
 
 class Colony implements IColonyMechanics {
   ///topic state [IArchaeaMechanics]
-  Map<String, Map<int, List<IArchaeaMechanics>>> _inputs =
+  final Map<String, Map<int, List<IArchaeaMechanics>>> _inputs =
       Map<String, Map<int, List<IArchaeaMechanics>>>();
 
   ///topic state [IArchaeaMechanics]
-  Map<String, Map<int, List<IArchaeaMechanics>>> _outputs =
+  final Map<String, Map<int, List<IArchaeaMechanics>>> _outputs =
       Map<String, Map<int, List<IArchaeaMechanics>>>();
 
   ///name [IArchaeaMechanics]
-  Map<String, List<IArchaeaMechanics>> _archaeas =
+  final Map<String, List<IArchaeaMechanics>> _archaeas =
       Map<String, List<IArchaeaMechanics>>();
-  List<IArchaeaMechanics> _listArchaea =
+  final List<IArchaeaMechanics> _listArchaea =
       List<IArchaeaMechanics>.empty(growable: true);
-  bool _isUpdating = false;
-  bool get isUpdating => _isUpdating;
+  // bool _isUpdating = false;
+  // bool get isUpdating => _isUpdating;
 
   void addArchaea(IArchaeaMechanics archaea) {
     if (!_archaeas.containsKey(archaea.name)) {
@@ -32,7 +32,7 @@ class Colony implements IColonyMechanics {
     _addToInput(archaea);
     _addToOutput(archaea);
 
-    _isUpdating = false;
+    // _isUpdating = false;
   }
 
   void _addToInput(IArchaeaMechanics arc) {
@@ -99,7 +99,7 @@ class Colony implements IColonyMechanics {
           // _removeFromOutput(archaea);
           // arr[i].goOut();
           arr.removeAt(i);
-          _isUpdating = false;
+          // _isUpdating = false;
           break;
         }
       }
@@ -140,6 +140,21 @@ class Colony implements IColonyMechanics {
     _listArchaea.forEach((element) {
       directLinkArchaea(element);
     });
+  }
+
+  bool call(ITastyPieDTO dto) {
+    bool isCall = false;
+    if (_inputs.containsKey(dto.topic)) {
+      _inputs[dto.topic]!.forEach((key, value) {
+        if ((key & dto.state) != 0) {
+          value.forEach((element) {
+            element.call(dto);
+            isCall = true;
+          });
+        }
+      });
+    }
+    return isCall;
   }
 
   bool sendToExtern(ITastyPieDTO dto) {
