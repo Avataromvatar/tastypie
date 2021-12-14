@@ -1,6 +1,6 @@
 import 'package:tastypie/src/colony/icolony.dart';
 import 'package:tastypie/src/dto/dto.dart';
-import 'package:tastypie/src/filter/filter.dart';
+// import 'package:tastypie/src/filter/filter.dart';
 import 'package:tastypie/src/point/point.dart';
 
 enum eArchaeaType { IN, OUT, IN_OUT }

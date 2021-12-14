@@ -1,6 +1,6 @@
 import 'package:tastypie/src/archaea/iarchaea.dart';
 import 'package:tastypie/src/dto/dto.dart';
-import 'package:tastypie/src/filter/filter.dart';
+// import 'package:tastypie/src/filter/filter.dart';
 
 abstract class IArchaeaPointCommon {
   // List<IArchaeaFilter> get filter;
