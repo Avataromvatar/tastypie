@@ -8,23 +8,23 @@ import 'package:test/test.dart';
 Future<void> main() async {
   // group('A group of tests', () async {
   final colony = Colony();
-  final a1 = Archaea('a1');
-  final a2 = Archaea('a2');
-  final a3 = Archaea('a2');
+  final a1 = Archaea();
+  final a2 = Archaea();
+  final a3 = Archaea();
   int count = 0;
   a1.addInPoint(ArchaeaPointInput('test', (data, topic, state) {
-    print('${a1.name} get msg: $topic $state $data');
+    print('${a1} get msg: $topic $state $data');
   }));
   a1.addOutPoint(ArchaeaPointOutput('test'));
   a2.addInPoint(ArchaeaPointInput('test', (data, topic, state) {
-    print('${a2.name} get msg: $topic $state $data');
+    print('${a2} get msg: $topic $state $data');
     count++;
     a2.send(TastyPieDTO('test3', 111));
   }));
   a2.addOutPoint(ArchaeaPointOutput('test3'));
   a3.addInPoint(ArchaeaPointInput('test3', (data, topic, state) {
     count++;
-    print('${a3.name} get msg: $topic $state $data');
+    print('${a3} get msg: $topic $state $data');
   }));
   colony.addArchaea(a1);
 

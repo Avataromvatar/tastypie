@@ -6,7 +6,7 @@ import 'package:tastypie/src/point/point.dart';
 enum eArchaeaType { IN, OUT, IN_OUT }
 
 abstract class IArchaea {
-  String get name;
+  // String get name;
 
   ///if archaea in colony(layer) she can send and get message
   bool get isInColony;

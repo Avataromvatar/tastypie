@@ -15,20 +15,22 @@ class Colony implements IColonyMechanics {
       Map<String, Map<int, List<IArchaeaMechanics>>>();
 
   ///name [IArchaeaMechanics]
-  final Map<String, List<IArchaeaMechanics>> _archaeas =
-      Map<String, List<IArchaeaMechanics>>();
+  // final Map<String, List<IArchaeaMechanics>> _archaeas =
+  //     Map<String, List<IArchaeaMechanics>>();
+  final List<IArchaeaMechanics> _archaeas =
+      List<IArchaeaMechanics>.empty(growable: true);
   final List<IArchaeaMechanics> _listArchaea =
       List<IArchaeaMechanics>.empty(growable: true);
   // bool _isUpdating = false;
   // bool get isUpdating => _isUpdating;
 
   void addArchaea(IArchaeaMechanics archaea) {
-    if (!_archaeas.containsKey(archaea.name)) {
-      _archaeas[archaea.name] = List<IArchaeaMechanics>.empty(growable: true);
-    }
+    // if (!_archaeas.containsKey(archaea.name)) {
+    //   _archaeas[archaea.name] = List<IArchaeaMechanics>.empty(growable: true);
+    // }
     archaea.colony = this;
     _listArchaea.add(archaea);
-    _archaeas[archaea.name]!.add(archaea);
+    _archaeas.add(archaea);
     _addToInput(archaea);
     _addToOutput(archaea);
 
@@ -82,7 +84,7 @@ class Colony implements IColonyMechanics {
   }
 
   void removeArchaea(IArchaeaMechanics archaea) {
-    if (_archaeas.containsKey(archaea.name)) {
+    if (_archaeas.contains(archaea)) {
       _listArchaea.remove(archaea);
       _removeFromInput(archaea);
       _removeFromOutput(archaea);
@@ -92,17 +94,18 @@ class Colony implements IColonyMechanics {
           point.disconnect(archaea.inpoint);
         });
       });
-      var arr = _archaeas[archaea.name]!;
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == archaea) {
-          // _removeFromInput(archaea);
-          // _removeFromOutput(archaea);
-          // arr[i].goOut();
-          arr.removeAt(i);
-          // _isUpdating = false;
-          break;
-        }
-      }
+      _archaeas.remove(archaea);
+      // var arr = _archaeas[archaea.name]!;
+      // for (var i = 0; i < arr.length; i++) {
+      //   if (arr[i] == archaea) {
+      //     // _removeFromInput(archaea);
+      //     // _removeFromOutput(archaea);
+      //     // arr[i].goOut();
+      //     arr.removeAt(i);
+      //     // _isUpdating = false;
+      //     break;
+      //   }
+      // }
     }
   }
 
@@ -161,11 +164,12 @@ class Colony implements IColonyMechanics {
     return false;
   }
 
-  List<IArchaea>? getArchaea(String name) {
-    if (_archaeas.containsKey(name)) {
-      return _archaeas[name];
-    }
-    return null;
+  List<IArchaea>? getArchaea() {
+    return _archaeas;
+    // if (_archaeas.containsKey(name)) {
+    //   return _archaeas[name];
+    // }
+    // return null;
   }
 
   bool connectColony(IColonyMechanics colony) {

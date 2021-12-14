@@ -4,7 +4,7 @@ import 'package:tastypie/src/dto/dto.dart';
 import 'package:tastypie/src/point/point.dart';
 
 class Archaea implements IArchaeaMechanics {
-  final String name;
+  // final String name;
   IColony? _colony;
   IColony? get colony => _colony;
   set colony(IColony? c) => _colony = c;
@@ -16,7 +16,7 @@ class Archaea implements IArchaeaMechanics {
   List<IArchaeaPointInput> get inpoint => _inpoint;
   List<IArchaeaPointOutput> get outpoint => _outpoint;
 
-  Archaea(this.name);
+  // Archaea(this.name);
 
   void addInPoint(IArchaeaPointInput ipoint) {
     if (!_inpoint.contains(ipoint)) {

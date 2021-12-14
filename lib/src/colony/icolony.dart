@@ -16,7 +16,7 @@ abstract class IColony {
 }
 
 abstract class IColonyMechanics implements IColony {
-  List<IArchaea>? getArchaea(String name);
+  List<IArchaea>? getArchaea();
 
   ///connect another colony and analize all archaea for direct connect
   bool connectColony(IColonyMechanics colony);
