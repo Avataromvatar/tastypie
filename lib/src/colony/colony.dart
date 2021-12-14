@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tastypie/src/archaea/iarchaea.dart';
 import 'package:tastypie/src/colony/icolony.dart';
 import 'package:tastypie/src/dto/dto.dart';
@@ -15,6 +17,8 @@ class Colony implements IColonyMechanics {
   ///name [IArchaeaMechanics]
   Map<String, List<IArchaeaMechanics>> _archaeas =
       Map<String, List<IArchaeaMechanics>>();
+  List<IArchaeaMechanics> _listArchaea =
+      List<IArchaeaMechanics>.empty(growable: true);
   bool _isUpdating = false;
   bool get isUpdating => _isUpdating;
 
@@ -22,10 +26,12 @@ class Colony implements IColonyMechanics {
     if (!_archaeas.containsKey(archaea.name)) {
       _archaeas[archaea.name] = List<IArchaeaMechanics>.empty(growable: true);
     }
-
+    archaea.colony = this;
+    _listArchaea.add(archaea);
     _archaeas[archaea.name]!.add(archaea);
     _addToInput(archaea);
     _addToOutput(archaea);
+
     _isUpdating = false;
   }
 
@@ -77,10 +83,21 @@ class Colony implements IColonyMechanics {
 
   void removeArchaea(IArchaeaMechanics archaea) {
     if (_archaeas.containsKey(archaea.name)) {
+      _listArchaea.remove(archaea);
+      _removeFromInput(archaea);
+      _removeFromOutput(archaea);
+      archaea.goOut();
+      _listArchaea.forEach((element) {
+        element.outpoint.forEach((point) {
+          point.disconnect(archaea.inpoint);
+        });
+      });
       var arr = _archaeas[archaea.name]!;
       for (var i = 0; i < arr.length; i++) {
         if (arr[i] == archaea) {
-          arr[i].goOut();
+          // _removeFromInput(archaea);
+          // _removeFromOutput(archaea);
+          // arr[i].goOut();
           arr.removeAt(i);
           _isUpdating = false;
           break;
@@ -102,9 +119,12 @@ class Colony implements IColonyMechanics {
             //state Ok
             value.forEach((archaea) {
               if (archaea != arch) {
-                arch.outpoint[i].connect(archaea.inpoint.singleWhere((input) =>
-                    input.checkAccess(
-                        arch.outpoint[i].topic, arch.outpoint[i].stateMask)));
+                //add elements
+
+                arch.outpoint[i].connect([
+                  archaea.inpoint.singleWhere((input) => input.checkAccess(
+                      arch.outpoint[i].topic, arch.outpoint[i].stateMask))
+                ]);
               }
             });
           }
@@ -117,6 +137,9 @@ class Colony implements IColonyMechanics {
 
   void updateDirectNet() {
     //step 1
+    _listArchaea.forEach((element) {
+      directLinkArchaea(element);
+    });
   }
 
   bool sendToExtern(ITastyPieDTO dto) {

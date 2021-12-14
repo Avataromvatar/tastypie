@@ -12,7 +12,7 @@ abstract class IColony {
   bool sendToExtern(ITastyPieDTO dto);
 }
 
-abstract class IColonyMechanics {
+abstract class IColonyMechanics implements IColony {
   List<IArchaea>? getArchaea(String name);
 
   ///connect another colony and analize all archaea for direct connect

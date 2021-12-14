@@ -13,8 +13,8 @@ abstract class IArchaeaPointCommon {
 
 abstract class IArchaeaPointOutput implements IArchaeaPointCommon {
   List<IArchaeaPointInput> get connections;
-  void connect(IArchaeaPointInput inPoint);
-  void disconnect(IArchaeaPointInput inPoint);
+  void connect(List<IArchaeaPointInput> inPoints);
+  void disconnect(List<IArchaeaPointInput> inPoints);
   void disconnectAll();
   bool send(dynamic data, {int state = 1});
   bool sendDTO(ITastyPieDTO dto);
@@ -75,20 +75,24 @@ class ArchaeaPointOutput extends ArchaeaPointCommon
   ArchaeaPointOutput(String topic, {int stateMask = 0xFFFFFFFF})
       : super(topic, stateMask: stateMask);
 
-  void connect(IArchaeaPointInput inPoint) {
-    if (!_connections.contains(inPoint)) {
-      _connections.add(inPoint);
-    }
+  void connect(List<IArchaeaPointInput> inPoints) {
+    inPoints.forEach((element) {
+      if (!_connections.contains(element)) {
+        _connections.add(element);
+      }
+    });
   }
 
   void disconnectAll() {
     _connections.clear();
   }
 
-  void disconnect(IArchaeaPointInput inPoint) {
-    if (_connections.contains(inPoint)) {
-      _connections.remove(inPoint);
-    }
+  void disconnect(List<IArchaeaPointInput> inPoints) {
+    inPoints.forEach((element) {
+      if (_connections.contains(element)) {
+        _connections.remove(element);
+      }
+    });
   }
 
   bool sendDTO(ITastyPieDTO dto) {
