@@ -5,7 +5,7 @@ import 'package:tastypie/src/colony/icolony.dart';
 import 'package:tastypie/src/dto/dto.dart';
 import 'package:tastypie/src/point/point.dart';
 
-class Colony implements IColonyMechanics {
+class TastyPieLayer implements ITastyPieLayerMechanics {
   ///topic state [IArchaeaMechanics]
   final Map<String, Map<int, List<IArchaeaMechanics>>> _inputs =
       Map<String, Map<int, List<IArchaeaMechanics>>>();
@@ -172,7 +172,7 @@ class Colony implements IColonyMechanics {
     // return null;
   }
 
-  bool connectColony(IColonyMechanics colony) {
+  bool connectTastyPieLayer(ITastyPieLayerMechanics colony) {
     return false;
   }
 }

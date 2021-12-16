@@ -5,10 +5,10 @@ import 'package:tastypie/src/point/point.dart';
 
 class Archaea implements IArchaeaMechanics {
   // final String name;
-  IColony? _colony;
-  IColony? get colony => _colony;
-  set colony(IColony? c) => _colony = c;
-  bool get isInColony => _colony != null ? true : false;
+  ITastyPieLayer? _colony;
+  ITastyPieLayer? get colony => _colony;
+  set colony(ITastyPieLayer? c) => _colony = c;
+  bool get isInTastyPieLayer => _colony != null ? true : false;
   List<IArchaeaPointInput> _inpoint =
       List<IArchaeaPointInput>.empty(growable: true);
   List<IArchaeaPointOutput> _outpoint =

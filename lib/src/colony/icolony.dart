@@ -1,7 +1,7 @@
 import 'package:tastypie/src/archaea/iarchaea.dart';
 import 'package:tastypie/src/dto/dto.dart';
 
-abstract class IColony {
+abstract class ITastyPieLayer {
   // bool get isUpdating;
   void addArchaea(IArchaeaMechanics archaea);
   void removeArchaea(IArchaeaMechanics archaea);
@@ -15,9 +15,9 @@ abstract class IColony {
   bool sendToExtern(ITastyPieDTO dto);
 }
 
-abstract class IColonyMechanics implements IColony {
+abstract class ITastyPieLayerMechanics implements ITastyPieLayer {
   List<IArchaea>? getArchaea();
 
   ///connect another colony and analize all archaea for direct connect
-  bool connectColony(IColonyMechanics colony);
+  bool connectTastyPieLayer(ITastyPieLayerMechanics colony);
 }

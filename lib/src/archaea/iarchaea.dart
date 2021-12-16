@@ -9,7 +9,7 @@ abstract class IArchaea {
   // String get name;
 
   ///if archaea in colony(layer) she can send and get message
-  bool get isInColony;
+  bool get isInTastyPieLayer;
 
   //if she signals not heard and nobody send signal to she
   // bool get isLonely;
@@ -24,13 +24,13 @@ abstract class IArchaea {
 }
 
 abstract class IArchaeaMechanics implements IArchaea {
-  ///Then Archaea add to Colony? Colony set self to [colony]
-  IColony? get colony;
-  set colony(IColony? c);
+  ///Then Archaea add to TastyPieLayer? TastyPieLayer set self to [colony]
+  ITastyPieLayer? get colony;
+  set colony(ITastyPieLayer? c);
 
-  ///Colony call then get message
+  ///TastyPieLayer call then get message
   void call(ITastyPieDTO dto);
 
-  ///Colony call when this archaea remove from colony
+  ///TastyPieLayer call when this archaea remove from colony
   void goOut();
 }

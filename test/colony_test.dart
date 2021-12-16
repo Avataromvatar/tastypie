@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:tastypie/src/archaea/archaea.dart';
 import 'package:tastypie/src/colony/colony.dart';
 import 'package:tastypie/src/dto/dto.dart';
@@ -7,7 +9,7 @@ import 'package:test/test.dart';
 
 Future<void> main() async {
   // group('A group of tests', () async {
-  final colony = Colony();
+  final colony = TastyPieLayer();
   final a1 = Archaea();
   final a2 = Archaea();
   final a3 = Archaea();
