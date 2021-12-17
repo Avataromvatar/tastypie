@@ -42,12 +42,14 @@ class TasteCommon implements ITaste {
   final ITasteType type;
   final String topic;
   final int stateMask;
+
+  ///dont send dto to extern or another layer
   final bool onlyInTheLayer;
   ITopping? _ownTopping;
   ITopping? get ownTopping => _ownTopping;
   TasteCommon(this.type, this.topic,
       {this.stateMask = 0xFFFFFFFF,
-      this.onlyInTheLayer = false,
+      this.onlyInTheLayer = true,
       ITopping? ownTopping})
       : _ownTopping = ownTopping;
 }
@@ -61,15 +63,17 @@ class TasteInput extends TasteCommon implements ITasteInput {
   TasteInput(String topic, this._handler,
       {int stateMask = 0xFFFFFFFF,
       ITasteOutput? outputLink,
-      ITopping? ownTopping})
+      ITopping? ownTopping,
+      bool onlyInTheLayer = true})
       : _outputLink = outputLink,
         super(ITasteType.INPUT, topic,
-            stateMask: stateMask, ownTopping: ownTopping)
-            {
-              _streamController.stream.listen((event) {
-                call(event);
-              });
-            }
+            stateMask: stateMask,
+            ownTopping: ownTopping,
+            onlyInTheLayer: onlyInTheLayer) {
+    _streamController.stream.listen((event) {
+      call(event);
+    });
+  }
 
   StreamSink<ITasteDTO> get inputStream => _streamController.sink;
   ITasteOutput? get outputTaste => _outputLink;
@@ -98,9 +102,12 @@ class TasteOutput extends TasteCommon implements ITasteOutput {
   TasteOutput(String topic,
       {int stateMask = 0xFFFFFFFF,
       ITasteOutput? outputLink,
-      ITopping? ownTopping})
+      ITopping? ownTopping,
+      bool onlyInTheLayer = true})
       : super(ITasteType.OUTPUT, topic,
-            stateMask: stateMask, ownTopping: ownTopping);
+            stateMask: stateMask,
+            ownTopping: ownTopping,
+            onlyInTheLayer: onlyInTheLayer);
 
   Stream<ITasteDTO> get outputStream => _streamController.stream;
   List<ITasteInput> get connections => _links;
@@ -112,6 +119,14 @@ class TasteOutput extends TasteCommon implements ITasteOutput {
         element.call(dto);
         isSended = true;
       });
+    }
+    if (isSended) {
+      if (!onlyInTheLayer && ownTopping != null) {
+        if (ownTopping is IToppingMechanics) {
+          (ownTopping as IToppingMechanics).sendFromTaste(dto, this);
+        }
+      }
+      _streamController.add(dto);
     }
     return isSended;
   }

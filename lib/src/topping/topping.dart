@@ -18,6 +18,10 @@ abstract class ITopping {
 
   ///if [topic]=null return all Taste
   List<ITaste> getTaste({String? topic, int stateMask = 0xFFFFFFFF});
+
+  ///
+  List<ITasteInput> getTasteInput(String topic, {int stateMask = 0xFFFFFFFF});
+  List<ITasteOutput> getTasteOutput(String topic, {int stateMask = 0xFFFFFFFF});
 }
 
 abstract class IToppingMechanics implements ITopping {
@@ -34,7 +38,7 @@ abstract class IToppingMechanics implements ITopping {
   void call(ITasteDTO dto);
 
   ///TastyPieLayer call when this topping remove from layer
-  void complete();//TODO
+  void complete(); //TODO
 }
 
 class Topping implements IToppingMechanics {
@@ -42,6 +46,28 @@ class Topping implements IToppingMechanics {
   List<ITasteOutput> _output_taste = List<ITasteOutput>.empty(growable: true);
   List<ITasteInput> get inputTaste => _input_taste;
   List<ITasteOutput> get outputTaste => _output_taste;
+
+  List<ITasteInput> getTasteInput(String topic, {int stateMask = 0xFFFFFFFF}) {
+    List<ITasteInput> ret = List<ITasteInput>.empty(growable: true);
+    _input_taste.forEach((element) {
+      if (element.topic == topic && stateMask == element.stateMask) {
+        ret.add(element);
+      }
+    });
+    return ret;
+  }
+
+  List<ITasteOutput> getTasteOutput(String topic,
+      {int stateMask = 0xFFFFFFFF}) {
+    List<ITasteOutput> ret = List<ITasteOutput>.empty(growable: true);
+    _output_taste.forEach((element) {
+      if (element.topic == topic && stateMask == element.stateMask) {
+        ret.add(element);
+      }
+    });
+    return ret;
+  }
+
   bool addInputTaste(
       String topic,
       void Function(dynamic data, String topic, int state, ITasteOutput? output)
@@ -73,9 +99,9 @@ class Topping implements IToppingMechanics {
   }
 
   void sendFromTaste(ITasteDTO dto, ITasteOutput taste) {
-
     _own_layer?.sendToAnotherLayer(dto);
   }
+
   bool send(ITasteDTO dto) {
     bool isSending = false;
     _output_taste.forEach((element) {
