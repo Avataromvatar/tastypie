@@ -73,18 +73,26 @@ class Topping implements IToppingMechanics {
       void Function(dynamic data, String topic, int state, ITasteOutput? output)
           handler,
       {int stateMask = 0xFFFFFFFF,
-      ITasteOutput? link}) {
+      ITasteOutput? link,
+      bool onlyInTheLayer = true}) {
     //TODO analize _input_taste before add
     _input_taste.add(TasteInput(topic, handler,
-        stateMask: stateMask, outputLink: link, ownTopping: this));
+        stateMask: stateMask,
+        outputLink: link,
+        ownTopping: this,
+        onlyInTheLayer: onlyInTheLayer));
     return true;
   }
 
   bool addOutputTaste(String topic,
-      {List<ITasteInput>? connections, int stateMask = 0xFFFFFFFF}) {
+      {List<ITasteInput>? connections,
+      int stateMask = 0xFFFFFFFF,
+      bool onlyInTheLayer = true}) {
     //TODO analize _input_taste before add
-    _output_taste
-        .add(TasteOutput(topic, stateMask: stateMask, ownTopping: this));
+    _output_taste.add(TasteOutput(topic,
+        stateMask: stateMask,
+        ownTopping: this,
+        onlyInTheLayer: onlyInTheLayer));
     return true;
   }
 

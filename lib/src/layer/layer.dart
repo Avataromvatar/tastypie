@@ -43,6 +43,7 @@ class TastyPieLayer implements ITastyPieLayerMechanics {
       List<IToppingMechanics>.empty(growable: true);
 
   void addTopping(IToppingMechanics topping) {
+    topping.own_layer = this;
     _addToInput(topping);
     _addToOutput(topping);
     _listTopping.add(topping);
@@ -60,6 +61,7 @@ class TastyPieLayer implements ITastyPieLayerMechanics {
   }
 
   void removeTopping(IToppingMechanics topping) {
+    topping.own_layer = null;
     _removeFromOutput(topping);
     _removeFromInput(topping);
     _listTopping.remove(topping);

@@ -28,6 +28,14 @@ dynamic data
 
 
 
+# TODO
+
++ Analize - Maybe remove state? 
++ Topping addTaste... add param onlyInTheLayer
+
+
+
+
 
 
 
