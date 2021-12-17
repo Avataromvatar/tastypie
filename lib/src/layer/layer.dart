@@ -3,20 +3,33 @@ import 'dart:async';
 import 'package:tastypie/src/taste/taste.dart';
 import 'package:tastypie/src/taste/taste_dto.dart';
 import 'package:tastypie/src/topping/topping.dart';
+import 'package:tastypie/tastypie.dart';
 
 abstract class ITastyPieLayer {
   void addTopping(IToppingMechanics topping);
   void removeTopping(IToppingMechanics topping);
   List<ITopping>? getTopping(String topic, {int stateMask = 0xFFFFFFFF});
 
-  ///From layer to taste (down stream)
+  ///From layer to topping and to taste (down stream)
   bool call(ITasteDTO dto);
-  StreamSubscription<ITasteDTO>? listen(
-      String topic, void Function(ITasteDTO dto) handler,
-      {int stateMask = 0xFFFFFFFF});
+
+  bool sendToAnotherLayer(ITasteDTO dto);
+
+  ///listen output topic
+  // StreamSubscription<ITasteDTO>? listen(
+  //     String topic, void Function(ITasteDTO dto) handler,
+  //     {int stateMask = 0xFFFFFFFF});
 }
 
-class TastyPieLayer implements ITastyPieLayer {
+abstract class ITastyPieLayerMechanics implements ITastyPieLayer {
+  bool callFromAnotherLayer(ITasteDTO dto);
+  void connect(ITastyPieLayerMechanics layer);
+  void disconnect(ITastyPieLayerMechanics layer);
+}
+
+class TastyPieLayer implements ITastyPieLayerMechanics {
+  final List<ITastyPieLayerMechanics> _layers =
+      List<ITastyPieLayerMechanics>.empty(growable: true);
   final Map<String, Map<int, List<ITasteInput>>> _inputsTaste =
       Map<String, Map<int, List<ITasteInput>>>();
 
@@ -33,6 +46,17 @@ class TastyPieLayer implements ITastyPieLayer {
     _addToInput(topping);
     _addToOutput(topping);
     _listTopping.add(topping);
+    rebuildDirectNet();
+  }
+
+  bool sendToAnotherLayer(ITasteDTO dto) {
+    bool isSended = false;
+    _layers.forEach((element) {
+      if (element.callFromAnotherLayer(dto)) {
+        isSended = true;
+      }
+    });
+    return isSended;
   }
 
   void removeTopping(IToppingMechanics topping) {
@@ -40,6 +64,7 @@ class TastyPieLayer implements ITastyPieLayer {
     _removeFromInput(topping);
     _listTopping.remove(topping);
     // _rebuildDirectNet(topping);
+    topping.complete();
     rebuildDirectNet();
   }
 
@@ -60,9 +85,40 @@ class TastyPieLayer implements ITastyPieLayer {
     return isSended;
   }
 
-  StreamSubscription<ITasteDTO>? listen(
-      String topic, void Function(ITasteDTO dto) handler,
-      {int stateMask = 0xFFFFFFFF}) {}
+  bool callFromAnotherLayer(ITasteDTO dto) {
+    return call(dto);
+  }
+
+  void connect(ITastyPieLayerMechanics layer) {
+    if (!_layers.contains(layer)) _layers.add(layer);
+  }
+
+  void disconnect(ITastyPieLayerMechanics layer) {
+    _layers.remove(layer);
+  }
+  // StreamSubscription<ITasteDTO>? listen(
+  //     String topic, void Function(ITasteDTO dto) handler,
+  //     {int stateMask = 0xFFFFFFFF}) {
+  //       _searchAndDo(_outputsTaste,topic,(t){
+
+  //       },stateMask: stateMask);
+  //     }
+
+  void _searchAndDo<T extends ITaste>(Map<String, Map<int, List<T>>> dict,
+      String topic, void Function(T taste) fun,
+      {int stateMask = 0xFFFFFFFF}) {
+    dict.forEach((key, value) {
+      if (key == topic) {
+        value.forEach((sm, lt) {
+          if ((sm & stateMask) != 0) {
+            lt.forEach((t) {
+              fun(t);
+            });
+          }
+        });
+      }
+    });
+  }
 
   void _addToInput(IToppingMechanics topping) {
     topping.inputTaste.forEach((element) {

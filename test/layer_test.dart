@@ -24,7 +24,7 @@ Future<void> main() async {
   layer.rebuildDirectNet();
   test('First Test', () async {
     top.send(TasteDTO('test', 'this is test'));
-    // top1.send(TasteDTO('test1', 'this is test1'));
+    top1.send(TasteDTO('test1', 'this is test1'));
     await Future.delayed(Duration(seconds: 1));
     expect(true, true);
     layer.removeTopping(top1);

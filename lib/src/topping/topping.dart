@@ -34,7 +34,7 @@ abstract class IToppingMechanics implements ITopping {
   void call(ITasteDTO dto);
 
   ///TastyPieLayer call when this topping remove from layer
-  void complete();
+  void complete();//TODO
 }
 
 class Topping implements IToppingMechanics {
@@ -73,7 +73,8 @@ class Topping implements IToppingMechanics {
   }
 
   void sendFromTaste(ITasteDTO dto, ITasteOutput taste) {
-    //TODO
+
+    _own_layer?.sendToAnotherLayer(dto);
   }
   bool send(ITasteDTO dto) {
     bool isSending = false;

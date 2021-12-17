@@ -64,7 +64,12 @@ class TasteInput extends TasteCommon implements ITasteInput {
       ITopping? ownTopping})
       : _outputLink = outputLink,
         super(ITasteType.INPUT, topic,
-            stateMask: stateMask, ownTopping: ownTopping);
+            stateMask: stateMask, ownTopping: ownTopping)
+            {
+              _streamController.stream.listen((event) {
+                call(event);
+              });
+            }
 
   StreamSink<ITasteDTO> get inputStream => _streamController.sink;
   ITasteOutput? get outputTaste => _outputLink;
