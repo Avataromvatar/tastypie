@@ -119,14 +119,15 @@ class TasteOutput extends TasteCommon implements ITasteOutput {
         element.call(dto);
         isSended = true;
       });
-    }
-    if (isSended || (!onlyInTheLayer && ownTopping != null)) {
-      if (ownTopping is IToppingMechanics) {
-        (ownTopping as IToppingMechanics).sendFromTaste(dto, this);
-      }
+      if (isSended || (!onlyInTheLayer && ownTopping != null)) {
+        if (ownTopping is IToppingMechanics) {
+          (ownTopping as IToppingMechanics).sendFromTaste(dto, this);
+        }
 
-      _streamController.add(dto);
+        _streamController.add(dto);
+      }
     }
+
     return isSended;
   }
 
