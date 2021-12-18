@@ -13,7 +13,7 @@ abstract class ITastyPieLayer {
   ///From layer to topping and to taste (down stream)
   bool call(ITasteDTO dto);
 
-  bool sendToAnotherLayer(ITasteDTO dto);
+  bool sendToAnotherLayer(ITasteDTO dto, {ITastyPieLayer? source});
 
   ///listen output topic
   // StreamSubscription<ITasteDTO>? listen(
@@ -22,7 +22,7 @@ abstract class ITastyPieLayer {
 }
 
 abstract class ITastyPieLayerMechanics implements ITastyPieLayer {
-  bool callFromAnotherLayer(ITasteDTO dto);
+  bool callFromAnotherLayer(ITasteDTO dto, {ITastyPieLayer? source});
   void connect(ITastyPieLayerMechanics layer);
   void disconnect(ITastyPieLayerMechanics layer);
 }
@@ -50,7 +50,7 @@ class TastyPieLayer implements ITastyPieLayerMechanics {
     rebuildDirectNet();
   }
 
-  bool sendToAnotherLayer(ITasteDTO dto) {
+  bool sendToAnotherLayer(ITasteDTO dto, {ITastyPieLayer? source}) {
     bool isSended = false;
     _layers.forEach((element) {
       if (element.callFromAnotherLayer(dto)) {
@@ -87,7 +87,14 @@ class TastyPieLayer implements ITastyPieLayerMechanics {
     return isSended;
   }
 
-  bool callFromAnotherLayer(ITasteDTO dto) {
+  bool callFromAnotherLayer(ITasteDTO dto, {ITastyPieLayer? source}) {
+    if (source != null) {
+      _layers.forEach((element) {
+        if (element != source) {
+          element.callFromAnotherLayer(dto, source: this);
+        }
+      });
+    }
     return call(dto);
   }
 

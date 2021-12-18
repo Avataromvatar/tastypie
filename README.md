@@ -29,9 +29,10 @@ dynamic data
 
 
 # TODO
-
-+ Analize - Maybe remove state? 
-+ Topping addTaste... add param onlyInTheLayer
++ [ ] Add helper - MasterLayer singltone
++ [ ] need divided interface for consumer and developer. Example when inherit Topping no need IToppinMechanic  
++ [ ] Analize - Maybe remove state? 
++ [v] Topping addTaste... add param onlyInTheLayer
 
 
 
