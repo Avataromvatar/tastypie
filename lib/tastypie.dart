@@ -4,7 +4,7 @@
 library tastypie;
 
 export 'src/layer/layer.dart';
-export 'src/taste/taste.dart';
+export 'src/taste/taste_old.dart';
 export 'src/taste/taste_dto.dart';
 export 'src/topping/topping.dart';
 // export 'src/dto/dto.dart';

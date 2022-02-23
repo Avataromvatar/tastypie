@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:tastypie/src/taste/taste.dart';
+import 'package:tastypie/src/taste/taste_old.dart';
 import 'package:tastypie/src/taste/taste_dto.dart';
 import 'package:tastypie/src/topping/topping.dart';
 import 'package:tastypie/tastypie.dart';

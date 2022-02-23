@@ -1,5 +1,5 @@
 import 'package:tastypie/src/layer/layer.dart';
-import 'package:tastypie/src/taste/taste.dart';
+import 'package:tastypie/src/taste/taste_old.dart';
 import 'package:tastypie/src/taste/taste_dto.dart';
 
 abstract class ITopping {
