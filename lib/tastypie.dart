@@ -3,7 +3,7 @@
 /// More dartdocs go here.
 library tastypie;
 
-export 'src/layer/layer.dart';
+export 'src/layer/layer_old.dart';
 export 'src/taste/taste_old.dart';
 export 'src/taste/taste_dto.dart';
 export 'src/topping/topping.dart';

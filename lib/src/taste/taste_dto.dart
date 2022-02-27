@@ -16,5 +16,5 @@ class TasteDTO<T> implements ITasteDTO {
   bool isLocal;
   T data;
 
-  TasteDTO(this.topic, this.data, {this.state = 1});
+  TasteDTO(this.topic, this.data, {this.state = 1, this.isLocal = false,this.source=''});
 }
